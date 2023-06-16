@@ -17,3 +17,10 @@ Hint:
 o Show off your work to us
  This is a chance for you to evaluate our tech to see how you like it
  If you have questions, don’t hesitate to ask.
+
+## Build
+docker compose up
+
+node ace migration:run
+node ace db:seed
+
