@@ -10,24 +10,39 @@ services:
       - MYSQL_DATABASE=$DB_NAME
     ports:
       - $DB_PORT:$DB_DOCKER_PORT
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 20
     volumes:
       - db:/var/lib/mysql
-  # app:
-  #   depends_on:
-  #     - mysqldb
-  #   build: ./core
-  #   restart: unless-stopped
-  #   env_file: ./.env
-  #   ports:
-  #     - $NODE_DOCKER_PORT:$NODE_PORT
-  #   environment:
-  #     - DB_HOST=mysqldb
-  #     - DB_USER=$DB_USER
-  #     - DB_PASSWORD=$DB_PASSWORD
-  #     - DB_NAME=$DB_NAME
-  #     - DB_PORT=$DB_PORT
-  #   stdin_open: true
-  #   tty: true
+  core:
+    depends_on:
+      mysqldb:
+        condition: service_healthy
+    build: ./core
+    restart: unless-stopped
+    env_file: ./.env
+    ports:
+      - $NODE_DOCKER_PORT:$NODE_PORT
+    environment:
+      - DB_HOST=$DB_HOST
+      - DB_USER=$DB_USER
+      - DB_PASSWORD=$DB_PASSWORD
+      - DB_NAME=$DB_NAME
+      - DB_PORT=$DB_PORT
+    stdin_open: true
+    tty: true
+  web:
+    depends_on:
+      - core
+    build: ./web
+    restart: unless-stopped
+    env_file: ./.env
+    ports:
+      - $REACT_DOCKER_PORT:$REACT_PORT
+    stdin_open: true
+    tty: true
 
 volumes: 
   db:

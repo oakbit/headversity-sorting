@@ -4,5 +4,6 @@ WORKDIR /core
 COPY package.json .
 RUN npm install
 COPY . .
-CMD node ace serve
+
+ENTRYPOINT ./startup.sh
 EXPOSE 3333

@@ -19,8 +19,19 @@ o Show off your work to us
  If you have questions, don’t hesitate to ask.
 
 ## Build
+
+```
+docker compose build
+```
+
+## Run
+
+```
 docker compose up
+```
 
-node ace migration:run
-node ace db:seed
+MySQL db exposed on port 3306
+API exposed on port 3333
+Frontend exposed on port 3000
 
+Docker instance network bindings are mysqldb, core, and web.
